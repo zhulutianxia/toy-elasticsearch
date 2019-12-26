@@ -27,7 +27,7 @@ public class ImportTask {
     private SearchRepository searchRepository;
 
     @Async
-    @Scheduled(cron = "0 36 11 ? * *")
+    @Scheduled(cron = "0 0 2 ? * *")
     public void importTravel() {
         try {
             log.info("开始导入玩具数据...");
