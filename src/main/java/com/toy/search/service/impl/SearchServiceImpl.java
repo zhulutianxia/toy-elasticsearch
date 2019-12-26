@@ -189,6 +189,7 @@ public class SearchServiceImpl implements SearchService {
         // 关键字搜索
         if (StringUtils.isNotBlank(param.getKeyword())) {
             MultiMatchQueryBuilder queryBuilder1 = QueryBuilders.multiMatchQuery(param.getKeyword(), "toyName", "brandName", "typeName", "abilityName");
+            queryBuilder1.analyzer("ik_max_word").field("toyName").field("brandName").field("typeName").field("abilityName");
             boolQueryBuilder.must(queryBuilder1);
         }
         // 年龄筛选
