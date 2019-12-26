@@ -10,8 +10,7 @@ public enum ToySortType {
     POPULAR_SORT(1, "人气最高"),
     LATEST_SORT(2, "最新上架"),
     PRICE_MAX_SORT(3, "价格最高"),
-    PRICE_MIN_SORT(4, "价格最低"),
-    HOT_TOY_SORT(5, "本周最热");
+    PRICE_MIN_SORT(4, "价格最低");
 
     private int type;
     private String name;
@@ -21,7 +20,6 @@ public enum ToySortType {
         this.name = value;
     }
 
-    // 在筛选页面返回给客户端的数据,目前不返回本周最热
     private static ToySortType[] RETURN_TOY_SORT_TYPE_ARR = {NORMAL_SORT, POPULAR_SORT, LATEST_SORT,
             PRICE_MAX_SORT, PRICE_MIN_SORT};
 

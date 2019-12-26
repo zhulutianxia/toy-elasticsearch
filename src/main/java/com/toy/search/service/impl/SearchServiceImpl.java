@@ -83,7 +83,7 @@ public class SearchServiceImpl implements SearchService {
             // 构建toy
             List<Map<String, Object>> toyList = buildToy(page.getContent(), depotId);
 
-            result.put("toyList", toyList);
+            result.put("toys", toyList);
             result.put("pageNumber", param.getPageNumber());
             result.put("totalPages", page.getTotalPages());
         } catch (Exception e) {
@@ -139,6 +139,12 @@ public class SearchServiceImpl implements SearchService {
         return list;
     }
 
+    /**
+     * 构建排序规则
+     * @param toySort
+     * @param userId
+     * @return
+     */
     private List<ScriptSortBuilder> buildQuerySort(Integer toySort, long userId) {
         List<ScriptSortBuilder> sortBuilderList = new ArrayList<>();
         sortBuilderList.add(SortBuilders.scriptSort(new Script("doc['stockNum'].value > 0 ? 1 : 0"), ScriptSortBuilder.ScriptSortType.NUMBER).order(SortOrder.DESC));
