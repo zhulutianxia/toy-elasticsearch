@@ -1,0 +1,38 @@
+server:
+  port: 94
+
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://106.75.4.96:6033/toy?useUnicode=true&character_set_client=utf8mb4
+    username: xieyabo
+    password: bj173
+
+    druid:
+      initial-size: 5
+      min-idle: 5
+      max-active: 20
+      max-wait: 60000
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+      validation-query: SELECT 1 FROM DUAL
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      pool-prepared-statements: true
+      max-pool-prepared-statement-per-connection-size: 20
+
+  data:
+    elasticsearch:
+      cluster-name: es-msz
+      cluster-nodes: 106.75.34.245:9300
+      ##开启 Elasticsearch 仓库
+      repositories:
+        enabled: true
+
+logging:
+  level:
+    com:
+      toy:
+        search:
+          dao: debug

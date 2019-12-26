@@ -1,0 +1,38 @@
+package com.toy.search.controller;
+
+import com.toy.search.param.SearchParam;
+import com.toy.search.service.SearchService;
+import com.toy.search.utils.ReturnJsonUtil;
+import com.toy.search.utils.TokenUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
+
+/**
+ * @Author: weierde
+ * @Date: 2019-12-05 15:53
+ * @Description:
+ */
+@RestController
+@RequestMapping("/search")
+public class SearchController {
+
+    @Autowired
+    private SearchService searchService;
+
+    /**
+     * 搜索数据
+     *
+     * @param request
+     * @param param
+     * @return
+     */
+    @PostMapping("list")
+    public ReturnJsonUtil searchWord(HttpServletRequest request, SearchParam param) {
+        long userId = TokenUtil.getUserIdFromCookie(request);
+        return searchService.searchWord(param, userId);
+    }
+}
