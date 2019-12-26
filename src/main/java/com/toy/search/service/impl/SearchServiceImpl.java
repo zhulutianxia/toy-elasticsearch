@@ -133,9 +133,6 @@ public class SearchServiceImpl implements SearchService {
                         }
                     }
                 }
-                map.put("stockNum", toy.getStockNum());
-                map.put("rentNum", toy.getRentNum());
-                map.put("purchaseTime", DateUtil.toStrings(new Date(toy.getPurchaseTime())));
                 list.add(map);
             });
         }
