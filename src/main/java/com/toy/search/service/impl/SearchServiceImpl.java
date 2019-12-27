@@ -109,7 +109,7 @@ public class SearchServiceImpl implements SearchService {
             List<Long> hotToyIds = toyMapper.getHotToyIds(depotId);
             List<SpecialToy> specialToyIds = toyMapper.getSpecialToyIds(depotId);
             toyList.forEach(toy -> {
-                Map<String, Object> map = new HashMap<>(13);
+                Map<String, Object> map = new HashMap<>(14);
                 map.put("toyId", toy.getToyId());
                 map.put("toyName", toy.getToyName());
                 map.put("image", Constants.CDN_IMG_URL_ONLINE + toy.getImage());
