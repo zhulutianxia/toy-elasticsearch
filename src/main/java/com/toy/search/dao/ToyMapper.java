@@ -15,7 +15,7 @@ import java.util.Set;
 public interface ToyMapper {
 
     @Select("select t.toy_id toyId, CONCAT(b.brand_name, t.toy_name) toyName, t.toy_tpt_image image, b.brand_name brandName, " +
-            "t.toy_price price, t.toy_daily_money rentMoney, t.min_age_range minAgeRange, t.max_age_range maxAgeRange, " +
+            "t.toy_price price, t.toy_daily_money rentMoney, t.min_age_range minAgeRange, t.max_age_range maxAgeRange, b.brand_image brandImage, " +
             "t.toy_size_type toySize, t.rent_type rentType, t.brand_id brandId, t.toy_type_ids toyTypeIds, t.ability_ids abilityIds, " +
             "group_concat(DISTINCT y.toy_type_name) typeName, group_concat(DISTINCT a.ability_name) abilityName, d.depot_id depotId, " +
             "d.toy_stock_num stockNum, d.toy_rent_num toyRentNum, date_format(t.purchase_time, '%Y-%m-%d %H:%i:%s') purchaseTime " +
