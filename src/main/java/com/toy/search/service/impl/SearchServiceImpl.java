@@ -113,12 +113,13 @@ public class SearchServiceImpl implements SearchService {
                 map.put("toyId", toy.getToyId());
                 map.put("toyName", toy.getToyName());
                 map.put("image", Constants.CDN_IMG_URL_ONLINE + toy.getImage());
-                map.put("brandImage", Constants.CDN_IMG_URL_ONLINE + toy.getBrandImage());
+                map.put("brandImg", Constants.CDN_IMG_URL_ONLINE + toy.getBrandImg());
                 map.put("price", toy.getPrice());
                 map.put("rentMoney", toy.getRentMoney());
                 map.put("toySize", ToySizeType.getToySizeTypeByOrigin(toy.getToySize()).getEngName());
                 map.put("rentType", toy.getRentType());
-                map.put("ageRangeString", AgeRangeUtil.getAgeRangeString(toy.getMinAgeRange(), toy.getMaxAgeRange()));
+                map.put("ageRange", AgeRangeUtil.getAgeRangeString(toy.getMinAgeRange(), toy.getMaxAgeRange()));
+                map.put("stockNum", toy.getStockNum());
                 map.put("isLatest", latestToyIds.contains(toy.getToyId()));
                 map.put("isRecommend", recommendToyIds.contains(toy.getToyId()));
                 map.put("isHot", hotToyIds.contains(toy.getToyId()));

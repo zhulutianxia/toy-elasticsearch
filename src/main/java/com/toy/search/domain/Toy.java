@@ -23,7 +23,7 @@ public class Toy implements Serializable {
     private String image;
     private int brandId;
     private String brandName;
-    private String brandImage;
+    private String brandImg;
     private int price;
     private int rentMoney;
     private int toySize;
