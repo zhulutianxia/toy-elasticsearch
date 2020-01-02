@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletRequest;
  * @Description:
  */
 @RestController
-@RequestMapping("/search")
+@RequestMapping("es/search")
 public class SearchController {
 
     @Autowired
