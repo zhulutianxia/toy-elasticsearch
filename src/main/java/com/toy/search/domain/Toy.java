@@ -7,6 +7,7 @@ import org.springframework.data.elasticsearch.annotations.Document;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.UUID;
 
 /**
  * @Author: weierde
@@ -18,6 +19,7 @@ import java.util.Date;
 public class Toy implements Serializable {
 
     @Id
+    private String uuid;
     private Long toyId;
     private String toyName;
     private String image;
@@ -38,6 +40,10 @@ public class Toy implements Serializable {
     private int stockNum;
     private int rentNum;
     private Date purchaseTime;
+
+    public String getUuid() {
+        return UUID.randomUUID().toString();
+    }
 
     public long getPurchaseTime() {
         return purchaseTime == null ? 0 : purchaseTime.getTime();

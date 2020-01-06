@@ -7,9 +7,11 @@ import com.toy.search.constant.Constants;
 import com.toy.search.dao.BabyMapper;
 import com.toy.search.dao.CityMapper;
 import com.toy.search.dao.ToyMapper;
+import com.toy.search.domain.Keyword;
 import com.toy.search.domain.SpecialToy;
 import com.toy.search.domain.Toy;
 import com.toy.search.param.SearchParam;
+import com.toy.search.repository.KeywordRepository;
 import com.toy.search.repository.SearchRepository;
 import com.toy.search.service.SearchService;
 import com.toy.search.utils.AgeRangeUtil;
@@ -24,9 +26,7 @@ import org.elasticsearch.search.sort.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
-import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -44,6 +44,9 @@ public class SearchServiceImpl implements SearchService {
     private SearchRepository searchRepository;
 
     @Autowired
+    private KeywordRepository keywordRepository;
+
+    @Autowired
     private CityMapper cityMapper;
 
     @Autowired
@@ -57,7 +60,6 @@ public class SearchServiceImpl implements SearchService {
         long start = System.currentTimeMillis();
         Map<String, Object> result = new HashMap<>(3);
         try {
-
             Long depotId = cityMapper.getDepotId(param.getCityCode());
 
             // 构建查询条件
@@ -92,6 +94,36 @@ public class SearchServiceImpl implements SearchService {
         }
         log.info("耗时--------------{}", System.currentTimeMillis() - start);
         return ReturnJsonUtil.success(result);
+    }
+
+    @Override
+    public ReturnJsonUtil recommendKeyword(String cityCode, String keyword) {
+        try {
+            Long depotId = cityMapper.getDepotId(cityCode);
+
+            BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+            boolQueryBuilder.must(QueryBuilders.matchQuery("depotId", depotId));
+
+            // 关键字搜索
+            if (StringUtils.isNotBlank(keyword)) {
+                MatchQueryBuilder queryBuilder = QueryBuilders.matchQuery("keyword", keyword);
+                boolQueryBuilder.must(queryBuilder);
+            }
+
+            NativeSearchQueryBuilder queryBuilder = new NativeSearchQueryBuilder();
+            queryBuilder.withIndices(Constants.INDEX_NAME.KEYWORD_INDEX)
+                    .withTypes(Constants.TOY_INDEX_TYPE_NAME.KEYWORD)
+                    .withQuery(boolQueryBuilder)
+                    .withPageable(PageRequest.of(0, 10));
+
+            Page<Keyword> page = keywordRepository.search(queryBuilder.build());
+            List<Keyword> content = page.getContent();
+            return ReturnJsonUtil.success(content);
+
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            return ReturnJsonUtil.error(ResultEnum.SERVER_ERROR);
+        }
     }
 
     /**
@@ -191,7 +223,7 @@ public class SearchServiceImpl implements SearchService {
         // 关键字搜索
         if (StringUtils.isNotBlank(param.getKeyword())) {
             MultiMatchQueryBuilder queryBuilder1 = QueryBuilders.multiMatchQuery(param.getKeyword(), "toyName", "brandName", "typeName", "abilityName");
-            queryBuilder1.analyzer("ik_max_word").field("toyName").field("brandName").field("typeName").field("abilityName");
+//            queryBuilder1.analyzer("ik_max_word").field("toyName").field("brandName").field("typeName").field("abilityName");
             boolQueryBuilder.must(queryBuilder1);
         }
         // 年龄筛选

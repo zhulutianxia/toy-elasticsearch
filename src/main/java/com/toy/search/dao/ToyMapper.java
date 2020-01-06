@@ -1,5 +1,6 @@
 package com.toy.search.dao;
 
+import com.toy.search.domain.Keyword;
 import com.toy.search.domain.SpecialToy;
 import com.toy.search.domain.Toy;
 import org.apache.ibatis.annotations.Select;
@@ -19,12 +20,12 @@ public interface ToyMapper {
             "t.toy_size_type toySize, t.rent_type rentType, t.brand_id brandId, t.toy_type_ids toyTypeIds, t.ability_ids abilityIds, " +
             "group_concat(DISTINCT y.toy_type_name) typeName, group_concat(DISTINCT a.ability_name) abilityName, d.depot_id depotId, " +
             "d.toy_stock_num stockNum, d.toy_rent_num toyRentNum, date_format(t.purchase_time, '%Y-%m-%d %H:%i:%s') purchaseTime " +
-            "from t_toy t left join t_brand b on t.brand_id = b.brand_id " +
+            "from tt_toy_depot d inner join t_toy t on t.toy_id = d.toy_id " +
+            "left join t_brand b on t.brand_id = b.brand_id " +
             "left join t_toy_type y on FIND_IN_SET(y.toy_type_id, REPLACE(t.toy_type_ids,';',',')) " +
             "LEFT JOIN t_ability a on FIND_IN_SET(a.ability_id, REPLACE(t.ability_ids,';',',')) " +
-            "left join tt_toy_depot d on t.toy_id = d.toy_id " +
             "WHERE t.is_publish = 1 " +
-            "group by t.toy_id ")
+            "group by d.toy_id,d.depot_id ")
     List<Toy> getToyList();
 
     @Select("select min_age_range from t_age_range where age_range_id = #{ageRange}")
@@ -54,4 +55,24 @@ public interface ToyMapper {
             "WHERE start_time < NOW() AND end_time > NOW() and depot_id = #{depotId} " +
             "group by toy_id ORDER BY rank ASC, id DESC")
     List<SpecialToy> getSpecialToyIds(Long depotId);
+
+    @Select("select distinct t.toy_name keyword, d.depot_id depotId " +
+            "from tt_toy_depot d inner join t_toy t on t.toy_id = d.toy_id " +
+            "WHERE t.is_publish = 1 group by d.toy_id,d.depot_id " +
+            "union " +
+            "select distinct b.brand_name keyword, d.depot_id depotId " +
+            "from tt_toy_depot d inner join t_toy t on t.toy_id = d.toy_id " +
+            "left join t_brand b on t.brand_id = b.brand_id " +
+            "WHERE t.is_publish = 1 group by d.toy_id,d.depot_id " +
+            "union " +
+            "select distinct y.toy_type_name keyword, d.depot_id depotId " +
+            "from tt_toy_depot d inner join t_toy t on t.toy_id = d.toy_id " +
+            "left join t_toy_type y on FIND_IN_SET(y.toy_type_id, REPLACE(t.toy_type_ids,';',',')) " +
+            "WHERE t.is_publish = 1 group by d.toy_id,d.depot_id " +
+            "union " +
+            "select distinct a.ability_name keyword, d.depot_id depotId " +
+            "from tt_toy_depot d inner join t_toy t on t.toy_id = d.toy_id " +
+            "LEFT JOIN t_ability a on FIND_IN_SET(a.ability_id, REPLACE(t.ability_ids,';',',')) " +
+            "WHERE t.is_publish = 1 group by d.toy_id,d.depot_id ")
+    List<Keyword> getToyKeyword();
 }

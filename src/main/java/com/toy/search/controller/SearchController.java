@@ -7,6 +7,7 @@ import com.toy.search.utils.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -34,5 +35,17 @@ public class SearchController {
     public ReturnJsonUtil searchWord(HttpServletRequest request, SearchParam param) {
         long userId = TokenUtil.getUserIdFromCookie(request);
         return searchService.searchWord(param, userId);
+    }
+
+    /**
+     * 推荐关键词
+     *
+     * @param cityCode
+     * @param keyword
+     * @return
+     */
+    @PostMapping("recommendKeyword")
+    public ReturnJsonUtil recommendKeyword(@RequestParam(defaultValue = "010") String cityCode, String keyword) {
+        return searchService.recommendKeyword(cityCode, keyword);
     }
 }

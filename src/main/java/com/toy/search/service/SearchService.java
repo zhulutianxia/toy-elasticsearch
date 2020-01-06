@@ -11,4 +11,6 @@ import com.toy.search.utils.ReturnJsonUtil;
 public interface SearchService {
 
     ReturnJsonUtil searchWord(SearchParam param, long userId);
+
+    ReturnJsonUtil recommendKeyword(String cityCode, String keyword);
 }

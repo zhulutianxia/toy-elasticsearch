@@ -11,14 +11,13 @@ public interface Constants {
      * 索引名称
      */
     class INDEX_NAME {
-        /**
-         * 玩具
-         */
         public static final String TOY_INDEX = "toyindex";
+        public static final String KEYWORD_INDEX = "keywordindex";
     }
 
     class TOY_INDEX_TYPE_NAME {
         public static final String TOY = "toy";
+        public static final String KEYWORD = "keyword";
     }
 
     int MAX_AGE_LIMIT = 999;
