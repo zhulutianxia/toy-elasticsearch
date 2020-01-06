@@ -38,7 +38,7 @@ public class SearchController {
     }
 
     /**
-     * 推荐关键词
+     * 搜索推荐关键词
      *
      * @param cityCode
      * @param keyword
