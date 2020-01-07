@@ -186,8 +186,8 @@ public class SearchServiceImpl implements SearchService {
         if (ToySortType.NORMAL_SORT.getType() == toySort) {
             Date babyBirth = babyMapper.getUserBabyBirth(userId);
             if (babyBirth != null) {
-                int monthAge = DateUtil.getMonthAge(babyBirth.getTime());
-                Script script = new Script("doc['minAgeRange'].value <= " + monthAge + " ? 1 : 0 + doc['maxAgeRange'].value >= " + monthAge + "? 1 : 0");
+                int month = DateUtil.getMonthAge(babyBirth.getTime());
+                Script script = new Script("doc['minAgeRange'].value <= " + month + " && doc['maxAgeRange'].value >= " + month + " ? 1 : 0");
                 sortBuilderList.add(SortBuilders.scriptSort(script, ScriptSortBuilder.ScriptSortType.NUMBER).order(SortOrder.DESC));
             }
             sortBuilderList.add(SortBuilders.scriptSort(new Script("doc['rentMoney'].value"), ScriptSortBuilder.ScriptSortType.NUMBER).order(SortOrder.ASC));
