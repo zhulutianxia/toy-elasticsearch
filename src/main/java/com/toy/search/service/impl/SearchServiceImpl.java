@@ -74,10 +74,13 @@ public class SearchServiceImpl implements SearchService {
                     .withQuery(boolQueryBuilder)
                     .withPageable(PageRequest.of(param.getPageNumber() - 1, param.getPageSize()));
 
-            // 插入排序规则
+            // 1.优先有库存的排在前面
+            queryBuilder.withSort(SortBuilders.scriptSort(new Script("doc['stockNum'].value > 0 ? 1 : 0"), ScriptSortBuilder.ScriptSortType.NUMBER).order(SortOrder.DESC));
             if (StringUtils.isNotBlank(param.getKeyword())) {
+                // 2.关键字搜索的优先匹配度高的排在前面
                 queryBuilder.withSort(SortBuilders.scoreSort().order(SortOrder.DESC));
             }
+            // 3.其他排序
             sortBuilderList.forEach(queryBuilder::withSort);
 
             Page<Toy> page = searchRepository.search(queryBuilder.build());
@@ -181,7 +184,6 @@ public class SearchServiceImpl implements SearchService {
      */
     private List<ScriptSortBuilder> buildQuerySort(Integer toySort, long userId) {
         List<ScriptSortBuilder> sortBuilderList = new ArrayList<>();
-        sortBuilderList.add(SortBuilders.scriptSort(new Script("doc['stockNum'].value > 0 ? 1 : 0"), ScriptSortBuilder.ScriptSortType.NUMBER).order(SortOrder.DESC));
 
         if (ToySortType.NORMAL_SORT.getType() == toySort) {
             Date babyBirth = babyMapper.getUserBabyBirth(userId);
