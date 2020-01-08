@@ -1,6 +1,6 @@
 package com.toy.search.dao;
 
-import com.toy.search.domain.Keyword;
+import com.toy.search.domain.Keywords;
 import com.toy.search.domain.SpecialToy;
 import com.toy.search.domain.Toy;
 import org.apache.ibatis.annotations.Select;
@@ -56,23 +56,23 @@ public interface ToyMapper {
             "group by toy_id ORDER BY rank ASC, id DESC")
     List<SpecialToy> getSpecialToyIds(Long depotId);
 
-    @Select("select distinct t.toy_name keyword, d.depot_id depotId " +
+    @Select("select distinct t.toy_name keywords, d.depot_id depotId " +
             "from tt_toy_depot d inner join t_toy t on t.toy_id = d.toy_id " +
             "WHERE t.is_publish = 1 group by d.toy_id,d.depot_id " +
             "union " +
-            "select distinct b.brand_name keyword, d.depot_id depotId " +
+            "select distinct b.brand_name keywords, d.depot_id depotId " +
             "from tt_toy_depot d inner join t_toy t on t.toy_id = d.toy_id " +
             "left join t_brand b on t.brand_id = b.brand_id " +
             "WHERE t.is_publish = 1 group by d.toy_id,d.depot_id " +
             "union " +
-            "select distinct y.toy_type_name keyword, d.depot_id depotId " +
+            "select distinct y.toy_type_name keywords, d.depot_id depotId " +
             "from tt_toy_depot d inner join t_toy t on t.toy_id = d.toy_id " +
             "left join t_toy_type y on FIND_IN_SET(y.toy_type_id, REPLACE(t.toy_type_ids,';',',')) " +
             "WHERE t.is_publish = 1 group by d.toy_id,d.depot_id " +
             "union " +
-            "select distinct a.ability_name keyword, d.depot_id depotId " +
+            "select distinct a.ability_name keywords, d.depot_id depotId " +
             "from tt_toy_depot d inner join t_toy t on t.toy_id = d.toy_id " +
             "LEFT JOIN t_ability a on FIND_IN_SET(a.ability_id, REPLACE(t.ability_ids,';',',')) " +
             "WHERE t.is_publish = 1 group by d.toy_id,d.depot_id ")
-    List<Keyword> getToyKeyword();
+    List<Keywords> getToyKeyword();
 }

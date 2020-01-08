@@ -1,9 +1,9 @@
 package com.toy.search.task;
 
 import com.toy.search.dao.ToyMapper;
-import com.toy.search.domain.Keyword;
+import com.toy.search.domain.Keywords;
 import com.toy.search.domain.Toy;
-import com.toy.search.repository.KeywordRepository;
+import com.toy.search.repository.KeywordsRepository;
 import com.toy.search.repository.SearchRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,7 @@ public class ImportTask {
     private SearchRepository searchRepository;
 
     @Autowired
-    private KeywordRepository keywordRepository;
+    private KeywordsRepository keywordsRepository;
 
     @Async
     @Scheduled(cron = "0 0 2 ? * *")
@@ -55,8 +55,8 @@ public class ImportTask {
         try {
             log.info("开始导入玩具搜索关键词...");
             long startTime = System.currentTimeMillis();
-            keywordRepository.deleteAll();
-            Iterable<Keyword> data = keywordRepository.saveAll(toyMapper.getToyKeyword());
+            keywordsRepository.deleteAll();
+            Iterable<Keywords> data = keywordsRepository.saveAll(toyMapper.getToyKeyword());
             if (data != null) {
                 long endTime = System.currentTimeMillis() - startTime;
                 log.info("【success】玩具搜索关键词数据导入完毕！耗时={}ms", endTime);

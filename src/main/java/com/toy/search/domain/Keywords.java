@@ -4,6 +4,7 @@ import com.toy.search.constant.Constants;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.Mapping;
 
 import java.io.Serializable;
 import java.util.UUID;
@@ -14,12 +15,13 @@ import java.util.UUID;
  * @Description:
  */
 @Data
-@Document(indexName = Constants.INDEX_NAME.KEYWORD_INDEX, type = Constants.TOY_INDEX_TYPE_NAME.KEYWORD)
-public class Keyword implements Serializable {
+@Document(indexName = Constants.INDEX_NAME.KEYWORDS_INDEX, type = Constants.TOY_INDEX_TYPE_NAME.KEYWORDS)
+@Mapping(mappingPath = "/json/keywords-mapping.json")
+public class Keywords implements Serializable {
 
     @Id
     private String uuid;
-    private String keyword;
+    private String keywords;
     private long depotId;
 
     public String getUuid() {

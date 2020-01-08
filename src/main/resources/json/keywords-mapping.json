@@ -1,0 +1,29 @@
+{
+  "keywords": {
+    "properties": {
+      "depotId": {
+        "type": "long"
+      },
+      "keywords": {
+        "type": "text",
+        "analyzer": "ik_max_word",
+        "search_analyzer": "ik_max_word",
+        "fields": {
+          "keyword": {
+            "ignore_above": 256,
+            "type": "keyword"
+          }
+        }
+      },
+      "uuid": {
+        "type": "text",
+        "fields": {
+          "keyword": {
+            "ignore_above": 256,
+            "type": "keyword"
+          }
+        }
+      }
+    }
+  }
+}

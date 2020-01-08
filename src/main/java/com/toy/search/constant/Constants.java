@@ -12,12 +12,12 @@ public interface Constants {
      */
     class INDEX_NAME {
         public static final String TOY_INDEX = "toyindex";
-        public static final String KEYWORD_INDEX = "keywordindex";
+        public static final String KEYWORDS_INDEX = "keywordsindex";
     }
 
     class TOY_INDEX_TYPE_NAME {
         public static final String TOY = "toy";
-        public static final String KEYWORD = "keyword";
+        public static final String KEYWORDS = "keywords";
     }
 
     int MAX_AGE_LIMIT = 999;

@@ -7,11 +7,11 @@ import com.toy.search.constant.Constants;
 import com.toy.search.dao.BabyMapper;
 import com.toy.search.dao.CityMapper;
 import com.toy.search.dao.ToyMapper;
-import com.toy.search.domain.Keyword;
+import com.toy.search.domain.Keywords;
 import com.toy.search.domain.SpecialToy;
 import com.toy.search.domain.Toy;
 import com.toy.search.param.SearchParam;
-import com.toy.search.repository.KeywordRepository;
+import com.toy.search.repository.KeywordsRepository;
 import com.toy.search.repository.SearchRepository;
 import com.toy.search.service.SearchService;
 import com.toy.search.utils.AgeRangeUtil;
@@ -44,7 +44,7 @@ public class SearchServiceImpl implements SearchService {
     private SearchRepository searchRepository;
 
     @Autowired
-    private KeywordRepository keywordRepository;
+    private KeywordsRepository keywordsRepository;
 
     @Autowired
     private CityMapper cityMapper;
@@ -106,18 +106,18 @@ public class SearchServiceImpl implements SearchService {
 
             // 关键字搜索
             if (StringUtils.isNotBlank(keyword)) {
-                MatchQueryBuilder queryBuilder = QueryBuilders.matchQuery("keyword", keyword);
+                MatchQueryBuilder queryBuilder = QueryBuilders.matchQuery("keywords", keyword).analyzer("ik_max_word");
                 boolQueryBuilder.must(queryBuilder);
             }
 
             NativeSearchQueryBuilder queryBuilder = new NativeSearchQueryBuilder();
-            queryBuilder.withIndices(Constants.INDEX_NAME.KEYWORD_INDEX)
-                    .withTypes(Constants.TOY_INDEX_TYPE_NAME.KEYWORD)
+            queryBuilder.withIndices(Constants.INDEX_NAME.KEYWORDS_INDEX)
+                    .withTypes(Constants.TOY_INDEX_TYPE_NAME.KEYWORDS)
                     .withQuery(boolQueryBuilder)
                     .withPageable(PageRequest.of(0, 10));
 
-            Page<Keyword> page = keywordRepository.search(queryBuilder.build());
-            List<Keyword> content = page.getContent();
+            Page<Keywords> page = keywordsRepository.search(queryBuilder.build());
+            List<Keywords> content = page.getContent();
             return ReturnJsonUtil.success(content);
 
         } catch (Exception e) {
@@ -190,7 +190,7 @@ public class SearchServiceImpl implements SearchService {
                 Script script = new Script("doc['minAgeRange'].value <= " + month + " && doc['maxAgeRange'].value >= " + month + " ? 1 : 0");
                 sortBuilderList.add(SortBuilders.scriptSort(script, ScriptSortBuilder.ScriptSortType.NUMBER).order(SortOrder.DESC));
             }
-            sortBuilderList.add(SortBuilders.scriptSort(new Script("doc['rentMoney'].value"), ScriptSortBuilder.ScriptSortType.NUMBER).order(SortOrder.ASC));
+//            sortBuilderList.add(SortBuilders.scriptSort(new Script("doc['rentMoney'].value"), ScriptSortBuilder.ScriptSortType.NUMBER).order(SortOrder.ASC));
             sortBuilderList.add(SortBuilders.scriptSort(new Script("doc['toyId'].value"), ScriptSortBuilder.ScriptSortType.NUMBER).order(SortOrder.DESC));
 
         } else if (ToySortType.POPULAR_SORT.getType() == toySort) {
@@ -223,7 +223,7 @@ public class SearchServiceImpl implements SearchService {
         // 关键字搜索
         if (StringUtils.isNotBlank(param.getKeyword())) {
             MultiMatchQueryBuilder queryBuilder1 = QueryBuilders.multiMatchQuery(param.getKeyword(), "toyName", "brandName", "typeName", "abilityName");
-//            queryBuilder1.analyzer("ik_max_word").field("toyName").field("brandName").field("typeName").field("abilityName");
+            queryBuilder1.analyzer("ik_max_word").field("toyName").field("brandName").field("typeName").field("abilityName");
             boolQueryBuilder.must(queryBuilder1);
         }
         // 年龄筛选
