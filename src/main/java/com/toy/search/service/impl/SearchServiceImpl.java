@@ -109,7 +109,7 @@ public class SearchServiceImpl implements SearchService {
 
             // 关键字搜索
             if (StringUtils.isNotBlank(keyword)) {
-                MatchQueryBuilder queryBuilder = QueryBuilders.matchQuery("keywords", keyword).analyzer("ik_max_word");
+                MatchQueryBuilder queryBuilder = QueryBuilders.matchQuery("keywords.ik_pinyin", keyword);
                 boolQueryBuilder.must(queryBuilder);
             }
 
@@ -117,7 +117,7 @@ public class SearchServiceImpl implements SearchService {
             queryBuilder.withIndices(Constants.INDEX_NAME.KEYWORDS_INDEX)
                     .withTypes(Constants.TOY_INDEX_TYPE_NAME.KEYWORDS)
                     .withQuery(boolQueryBuilder)
-                    .withPageable(PageRequest.of(0, 10));
+                    .withPageable(PageRequest.of(0, 20));
 
             Page<Keywords> page = keywordsRepository.search(queryBuilder.build());
             List<Keywords> content = page.getContent();
@@ -178,6 +178,7 @@ public class SearchServiceImpl implements SearchService {
 
     /**
      * 构建排序规则
+     *
      * @param toySort
      * @param userId
      * @return
@@ -224,8 +225,8 @@ public class SearchServiceImpl implements SearchService {
 
         // 关键字搜索
         if (StringUtils.isNotBlank(param.getKeyword())) {
-            MultiMatchQueryBuilder queryBuilder1 = QueryBuilders.multiMatchQuery(param.getKeyword(), "toyName", "brandName", "typeName", "abilityName");
-            queryBuilder1.analyzer("ik_max_word").field("toyName").field("brandName").field("typeName").field("abilityName");
+            MultiMatchQueryBuilder queryBuilder1 = QueryBuilders.multiMatchQuery(param.getKeyword(),
+                    "toyName.ik_pinyin", "brandName.ik_pinyin", "typeName.ik_pinyin", "abilityName.ik_pinyin");
             boolQueryBuilder.must(queryBuilder1);
         }
         // 年龄筛选
