@@ -86,7 +86,7 @@ public class SearchServiceImpl implements SearchService {
             Page<Toy> page = searchRepository.search(queryBuilder.build());
 
             // 构建toy
-            List<Map<String, Object>> toyList = buildToy(page.getContent(), depotId);
+            List<Map<String, Object>> toyList = buildToy(page.getContent(), depotId, userId);
 
             result.put("toys", toyList);
             result.put("pageNumber", param.getPageNumber());
@@ -136,15 +136,16 @@ public class SearchServiceImpl implements SearchService {
      * @param depotId
      * @return
      */
-    private List<Map<String, Object>> buildToy(List<Toy> toyList, Long depotId) {
+    private List<Map<String, Object>> buildToy(List<Toy> toyList, Long depotId, long userId) {
         List<Map<String, Object>> list = new ArrayList<>();
         if (CollectionUtils.isNotEmpty(toyList)) {
             Set<Long> recommendToyIds = toyMapper.getRecommendToyIds(depotId);
             List<Long> latestToyIds = toyMapper.getLatestToyIds(depotId);
             List<Long> hotToyIds = toyMapper.getHotToyIds(depotId);
             List<SpecialToy> specialToyIds = toyMapper.getSpecialToyIds(depotId);
+            List<Long> isInRentToyIds = toyMapper.getUserInRentToyIds(userId);
             toyList.forEach(toy -> {
-                Map<String, Object> map = new HashMap<>(15);
+                Map<String, Object> map = new HashMap<>(16);
                 map.put("toyId", toy.getToyId());
                 map.put("toyName", toy.getToyName());
                 map.put("image", Constants.CDN_IMG_URL_ONLINE + toy.getImage());
@@ -155,6 +156,7 @@ public class SearchServiceImpl implements SearchService {
                 map.put("rentType", toy.getRentType());
                 map.put("ageRange", AgeRangeUtil.getAgeRangeString(toy.getMinAgeRange(), toy.getMaxAgeRange()));
                 map.put("stockNum", toy.getStockNum());
+                map.put("isInRent", CollectionUtils.isNotEmpty(isInRentToyIds) && isInRentToyIds.contains(toy.getToyId()));
                 map.put("isLatest", latestToyIds.contains(toy.getToyId()));
                 map.put("isRecommend", recommendToyIds.contains(toy.getToyId()));
                 map.put("isHot", hotToyIds.contains(toy.getToyId()));
