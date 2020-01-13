@@ -1,5 +1,5 @@
 server:
-  port: 92
+  port: 94
 
 spring:
   datasource:
@@ -22,6 +22,13 @@ spring:
       pool-prepared-statements: true
       max-pool-prepared-statement-per-connection-size: 20
 
+  data:
+    elasticsearch:
+      cluster-name: es-msz
+      cluster-nodes: 106.75.72.149:9300
+      ##开启 Elasticsearch 仓库
+      repositories:
+        enabled: true
 
 logging:
   config: classpath:logback-online.xml
