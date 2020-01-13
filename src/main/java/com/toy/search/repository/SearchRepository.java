@@ -10,5 +10,5 @@ import org.springframework.stereotype.Component;
  * @Description:
  */
 @Component
-public interface SearchRepository extends ElasticsearchRepository<Toy, String> {
+public interface SearchRepository extends ElasticsearchRepository<Toy, Integer> {
 }

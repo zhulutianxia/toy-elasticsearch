@@ -7,7 +7,6 @@ import org.springframework.data.elasticsearch.annotations.*;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.UUID;
 
 
 /**
@@ -21,7 +20,9 @@ import java.util.UUID;
 public class Toy implements Serializable {
 
     @Id
-    private String uuid;
+    @Field(type = FieldType.Integer)
+    private Integer id;
+    @Field(type = FieldType.Long)
     private Long toyId;
     @MultiField(
             mainField = @Field(type = FieldType.Keyword),
@@ -32,8 +33,10 @@ public class Toy implements Serializable {
             }
     )
     private String toyName;
+    @Field(type = FieldType.Text)
     private String image;
-    private int brandId;
+    @Field(type = FieldType.Integer)
+    private Integer brandId;
     @MultiField(
             mainField = @Field(type = FieldType.Keyword),
             otherFields = {
@@ -43,13 +46,21 @@ public class Toy implements Serializable {
             }
     )
     private String brandName;
+    @Field(type = FieldType.Text)
     private String brandImg;
-    private int price;
-    private int rentMoney;
-    private int toySize;
-    private int minAgeRange;
-    private int maxAgeRange;
-    private int rentType;
+    @Field(type = FieldType.Integer)
+    private Integer price;
+    @Field(type = FieldType.Integer)
+    private Integer rentMoney;
+    @Field(type = FieldType.Integer)
+    private Integer toySize;
+    @Field(type = FieldType.Integer)
+    private Integer minAgeRange;
+    @Field(type = FieldType.Integer)
+    private Integer maxAgeRange;
+    @Field(type = FieldType.Integer)
+    private Integer rentType;
+    @Field(type = FieldType.Text)
     private String toyTypeIds;
     @MultiField(
             mainField = @Field(type = FieldType.Keyword),
@@ -60,6 +71,7 @@ public class Toy implements Serializable {
             }
     )
     private String typeName;
+    @Field(type = FieldType.Text)
     private String abilityIds;
     @MultiField(
             mainField = @Field(type = FieldType.Keyword),
@@ -70,14 +82,14 @@ public class Toy implements Serializable {
             }
     )
     private String abilityName;
-    private long depotId;
-    private int stockNum;
-    private int rentNum;
+    @Field(type = FieldType.Long)
+    private Long depotId;
+    @Field(type = FieldType.Integer)
+    private Integer stockNum;
+    @Field(type = FieldType.Integer)
+    private Integer rentNum;
+    @Field(type = FieldType.Date)
     private Date purchaseTime;
-
-    public String getUuid() {
-        return UUID.randomUUID().toString();
-    }
 
     public long getPurchaseTime() {
         return purchaseTime == null ? 0 : purchaseTime.getTime();

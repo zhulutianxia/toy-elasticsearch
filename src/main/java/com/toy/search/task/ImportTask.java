@@ -32,12 +32,11 @@ public class ImportTask {
     private KeywordsRepository keywordsRepository;
 
     @Async
-    @Scheduled(cron = "0 0 2 ? * *")
+    @Scheduled(cron = "0 7 0/1 * * ?")
     public void importToy() {
         try {
             log.info("开始导入玩具数据...");
             long startTime = System.currentTimeMillis();
-            searchRepository.deleteAll();
             Iterable<Toy> data = searchRepository.saveAll(toyMapper.getToyList());
             if (data != null) {
                 long endTime = System.currentTimeMillis() - startTime;
