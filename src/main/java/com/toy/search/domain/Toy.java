@@ -6,7 +6,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.*;
 
 import java.io.Serializable;
-import java.util.Date;
 
 
 /**
@@ -88,10 +87,7 @@ public class Toy implements Serializable {
     private Integer stockNum;
     @Field(type = FieldType.Integer)
     private Integer rentNum;
-    @Field(type = FieldType.Date)
-    private Date purchaseTime;
+    @Field(type = FieldType.Long)
+    private Long publishTime;
 
-    public long getPurchaseTime() {
-        return purchaseTime == null ? 0 : purchaseTime.getTime();
-    }
 }

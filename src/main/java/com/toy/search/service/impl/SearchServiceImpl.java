@@ -57,7 +57,6 @@ public class SearchServiceImpl implements SearchService {
 
     @Override
     public ReturnJsonUtil searchWord(SearchParam param, long userId) {
-        long start = System.currentTimeMillis();
         Map<String, Object> result = new HashMap<>(3);
         try {
             Long depotId = cityMapper.getDepotId(param.getCityCode());
@@ -95,7 +94,6 @@ public class SearchServiceImpl implements SearchService {
             log.error(e.getMessage(), e);
             return ReturnJsonUtil.error(ResultEnum.SERVER_ERROR);
         }
-        log.info("耗时--------------{}", System.currentTimeMillis() - start);
         return ReturnJsonUtil.success(result);
     }
 
@@ -202,7 +200,7 @@ public class SearchServiceImpl implements SearchService {
             sortBuilderList.add(SortBuilders.scriptSort(new Script("doc['rentNum'].value"), ScriptSortBuilder.ScriptSortType.NUMBER).order(SortOrder.DESC));
 
         } else if (ToySortType.LATEST_SORT.getType() == toySort) {
-            sortBuilderList.add(SortBuilders.scriptSort(new Script("doc['purchaseTime'].value"), ScriptSortBuilder.ScriptSortType.NUMBER).order(SortOrder.DESC));
+            sortBuilderList.add(SortBuilders.scriptSort(new Script("doc['publishTime'].value"), ScriptSortBuilder.ScriptSortType.NUMBER).order(SortOrder.DESC));
 
         } else if (ToySortType.PRICE_MAX_SORT.getType() == toySort) {
             sortBuilderList.add(SortBuilders.scriptSort(new Script("doc['rentMoney'].value"), ScriptSortBuilder.ScriptSortType.NUMBER).order(SortOrder.DESC));
