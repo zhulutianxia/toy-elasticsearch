@@ -17,7 +17,7 @@ public interface ToyMapper {
 
     @Select("select d.id, t.toy_id toyId, CONCAT(b.brand_name, t.toy_name) toyName, t.toy_tpt_image image, b.brand_name brandName, " +
             "t.toy_price price, t.toy_daily_money rentMoney, t.min_age_range minAgeRange, t.max_age_range maxAgeRange, b.brand_image brandImg, " +
-            "t.toy_size_type toySize, t.rent_type rentType, t.brand_id brandId, t.toy_type_ids toyTypeIds, t.ability_ids abilityIds, " +
+            "t.toy_size_type toySize, ORD(t.rent_type) rentType, t.brand_id brandId, t.toy_type_ids toyTypeIds, t.ability_ids abilityIds, " +
             "group_concat(DISTINCT y.toy_type_name) typeName, group_concat(DISTINCT a.ability_name) abilityName, d.depot_id depotId, " +
             "d.toy_stock_num stockNum, d.toy_rent_num rentNum, unix_timestamp(t.publish_time) publishTime, d.update_time updateTime " +
             "from tt_toy_depot d inner join t_toy t on t.toy_id = d.toy_id " +
