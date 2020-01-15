@@ -32,7 +32,7 @@ public class ImportTask {
     private KeywordsRepository keywordsRepository;
 
     @Async
-    @Scheduled(cron = "0 7 0/1 * * ?")
+//    @Scheduled(cron = "0 7 0/1 * * ?")
     public void importToy() {
         try {
             log.info("开始导入玩具数据...");

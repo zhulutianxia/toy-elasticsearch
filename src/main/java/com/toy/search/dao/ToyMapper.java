@@ -19,7 +19,7 @@ public interface ToyMapper {
             "t.toy_price price, t.toy_daily_money rentMoney, t.min_age_range minAgeRange, t.max_age_range maxAgeRange, b.brand_image brandImg, " +
             "t.toy_size_type toySize, t.rent_type rentType, t.brand_id brandId, t.toy_type_ids toyTypeIds, t.ability_ids abilityIds, " +
             "group_concat(DISTINCT y.toy_type_name) typeName, group_concat(DISTINCT a.ability_name) abilityName, d.depot_id depotId, " +
-            "d.toy_stock_num stockNum, d.toy_rent_num rentNum, unix_timestamp(t.publish_time) publishTime " +
+            "d.toy_stock_num stockNum, d.toy_rent_num rentNum, unix_timestamp(t.publish_time) publishTime, d.update_time updateTime " +
             "from tt_toy_depot d inner join t_toy t on t.toy_id = d.toy_id " +
             "left join t_brand b on t.brand_id = b.brand_id " +
             "left join t_toy_type y on FIND_IN_SET(y.toy_type_id, REPLACE(t.toy_type_ids,';',',')) " +
