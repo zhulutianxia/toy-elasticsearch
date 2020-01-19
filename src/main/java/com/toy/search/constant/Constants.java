@@ -7,6 +7,8 @@ public interface Constants {
 
     String CDN_IMG_URL_ONLINE = "https://ts.zlimg.com";
 
+    Long BJ_DEPOT_ID = 100101L;
+
     /**
      * 索引名称
      */

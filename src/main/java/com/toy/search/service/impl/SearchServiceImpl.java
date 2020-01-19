@@ -60,6 +60,9 @@ public class SearchServiceImpl implements SearchService {
         Map<String, Object> result = new HashMap<>(3);
         try {
             Long depotId = cityMapper.getDepotId(param.getCityCode());
+            if (depotId == null) {
+                depotId = Constants.BJ_DEPOT_ID;
+            }
 
             // 构建查询条件
             BoolQueryBuilder boolQueryBuilder = buildQuery(param, depotId);
@@ -101,6 +104,9 @@ public class SearchServiceImpl implements SearchService {
     public ReturnJsonUtil recommendKeyword(String cityCode, String keyword) {
         try {
             Long depotId = cityMapper.getDepotId(cityCode);
+            if (depotId == null) {
+                depotId = Constants.BJ_DEPOT_ID;
+            }
 
             BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
             boolQueryBuilder.must(QueryBuilders.matchQuery("depotId", depotId));
