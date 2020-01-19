@@ -199,8 +199,8 @@ public class SearchServiceImpl implements SearchService {
                 Script script = new Script("doc['minAgeRange'].value <= " + month + " && doc['maxAgeRange'].value >= " + month + " ? 1 : 0");
                 sortBuilderList.add(SortBuilders.scriptSort(script, ScriptSortBuilder.ScriptSortType.NUMBER).order(SortOrder.DESC));
             }
-//            sortBuilderList.add(SortBuilders.scriptSort(new Script("doc['rentMoney'].value"), ScriptSortBuilder.ScriptSortType.NUMBER).order(SortOrder.ASC));
-            sortBuilderList.add(SortBuilders.scriptSort(new Script("doc['toyId'].value"), ScriptSortBuilder.ScriptSortType.NUMBER).order(SortOrder.DESC));
+            sortBuilderList.add(SortBuilders.scriptSort(new Script("doc['rentNum'].value"), ScriptSortBuilder.ScriptSortType.NUMBER).order(SortOrder.DESC));
+            sortBuilderList.add(SortBuilders.scriptSort(new Script("doc['rentMoney'].value"), ScriptSortBuilder.ScriptSortType.NUMBER).order(SortOrder.DESC));
 
         } else if (ToySortType.POPULAR_SORT.getType() == toySort) {
             sortBuilderList.add(SortBuilders.scriptSort(new Script("doc['rentNum'].value"), ScriptSortBuilder.ScriptSortType.NUMBER).order(SortOrder.DESC));
