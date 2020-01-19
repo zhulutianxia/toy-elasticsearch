@@ -12,6 +12,11 @@ import lombok.Setter;
 @Getter
 public class SearchParam {
 
+    /** 公参 */
+    private String av;
+    private String cv;
+    private String client;
+
     private String keyword;
     private String cityCode = "010";
     private String ageRange;

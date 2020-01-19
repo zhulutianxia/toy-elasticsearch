@@ -107,7 +107,7 @@ public class SearchServiceImpl implements SearchService {
 
             // 关键字搜索
             if (StringUtils.isNotBlank(keyword)) {
-                MatchQueryBuilder queryBuilder = QueryBuilders.matchQuery("keywords.ik_pinyin", keyword);
+                MatchQueryBuilder queryBuilder = QueryBuilders.matchQuery("keywords.ik", keyword);
                 boolQueryBuilder.must(queryBuilder);
             }
 
@@ -226,7 +226,7 @@ public class SearchServiceImpl implements SearchService {
         // 关键字搜索
         if (StringUtils.isNotBlank(param.getKeyword())) {
             MultiMatchQueryBuilder queryBuilder1 = QueryBuilders.multiMatchQuery(param.getKeyword(),
-                    "toyName.ik_pinyin", "brandName.ik_pinyin", "typeName.ik_pinyin", "abilityName.ik_pinyin");
+                    "toyName.ik", "brandName.ik", "typeName.ik", "abilityName.ik");
             boolQueryBuilder.must(queryBuilder1);
         }
         // 年龄筛选
@@ -298,7 +298,10 @@ public class SearchServiceImpl implements SearchService {
             boolQueryBuilder.must(queryBuilder6);
         }
         // 配送方式筛选
-        if (param.getRentType() != null) {
+        if (param.getRentType() != null && (param.getRentType() == 4 || param.getRentType() == 6)) {
+            if ("android".equals(param.getClient()) && param.getRentType() == 4) {
+                param.setRentType(6);
+            }
             BoolQueryBuilder queryBuilder7 = QueryBuilders.boolQuery();
             queryBuilder7.should(QueryBuilders.boolQuery().filter(QueryBuilders.matchQuery("rentType", param.getRentType())));
             boolQueryBuilder.must(queryBuilder7);
