@@ -17,6 +17,7 @@ import com.toy.search.service.SearchService;
 import com.toy.search.utils.AgeRangeUtil;
 import com.toy.search.utils.DateUtil;
 import com.toy.search.utils.ReturnJsonUtil;
+import com.toy.search.utils.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -235,6 +236,7 @@ public class SearchServiceImpl implements SearchService {
                     "toyName.ik", "brandName.ik", "typeName.ik", "abilityName.ik");
             boolQueryBuilder.must(queryBuilder1);
         }
+
         // 年龄筛选
         if (StringUtils.isNotBlank(param.getAgeRange())) {
             String[] ageRanges = param.getAgeRange().split(",");
@@ -251,6 +253,7 @@ public class SearchServiceImpl implements SearchService {
             }
             boolQueryBuilder.must(queryBuilder2);
         }
+
         // 品牌筛选
         if (StringUtils.isNotBlank(param.getBrand())) {
             String[] brands = param.getBrand().split(",");
@@ -261,6 +264,7 @@ public class SearchServiceImpl implements SearchService {
             }
             boolQueryBuilder.must(queryBuilder3);
         }
+
         // 类别筛选
         if (StringUtils.isNotBlank(param.getToyType())) {
             String[] types = param.getToyType().split(",");
@@ -277,6 +281,7 @@ public class SearchServiceImpl implements SearchService {
             }
             boolQueryBuilder.must(queryBuilder4);
         }
+
         // 能力筛选
         if (StringUtils.isNotBlank(param.getAbility())) {
             String[] abilitys = param.getAbility().split(",");
@@ -293,9 +298,19 @@ public class SearchServiceImpl implements SearchService {
             }
             boolQueryBuilder.must(queryBuilder5);
         }
+
         // 尺寸筛选
-        if (StringUtils.isNotBlank(param.getToySize())) {
-            String[] sizes = param.getToySize().split(",");
+        int scene = param.getScene();
+        String toySize = param.getToySize();
+        if (scene == Constants.MEMBER_SCENE) {
+            if (StringUtils.isBlank(toySize)) {
+                toySize = "0,1,2";
+            } else if (StringUtils.isNotBlank(toySize) && toySize.contains("3")) {
+                toySize = StringUtil.removeString(toySize, "3", ",");
+            }
+        }
+        if (StringUtils.isNotBlank(toySize)) {
+            String[] sizes = toySize.split(",");
             BoolQueryBuilder queryBuilder6 = QueryBuilders.boolQuery();
             for (String size : sizes) {
                 queryBuilder6.should(QueryBuilders.boolQuery()
@@ -303,6 +318,7 @@ public class SearchServiceImpl implements SearchService {
             }
             boolQueryBuilder.must(queryBuilder6);
         }
+
         // 配送方式筛选
         if (param.getRentType() != null && (param.getRentType() == 4 || param.getRentType() == 6)) {
             if ("android".equals(param.getClient()) && param.getRentType() == 4) {

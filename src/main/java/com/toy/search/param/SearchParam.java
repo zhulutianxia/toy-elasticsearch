@@ -1,5 +1,6 @@
 package com.toy.search.param;
 
+import com.toy.search.constant.Constants;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,7 +13,9 @@ import lombok.Setter;
 @Getter
 public class SearchParam {
 
-    /** 公参 */
+    /**
+     * 公参
+     */
     private String av;
     private String cv;
     private String client;
@@ -28,4 +31,9 @@ public class SearchParam {
     private Integer rentType;
     private Integer pageNumber = 1;
     private Integer pageSize = 20;
+
+    /**
+     * 场景
+     */
+    private int scene = Constants.NORMAL_SCENE;
 }

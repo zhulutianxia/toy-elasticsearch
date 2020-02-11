@@ -22,6 +22,15 @@ public interface Constants {
         public static final String KEYWORDS = "keywords";
     }
 
+    /**
+     * 散租场景来源
+     */
+    int NORMAL_SCENE = 101;
+    /**
+     * 会员场景来源
+     */
+    int MEMBER_SCENE = 201;
+
     int MAX_AGE_LIMIT = 999;
     String HAN_ZI_SUI = "岁";
     String HAN_ZI_GE_YUE = "个月";
