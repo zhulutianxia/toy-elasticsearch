@@ -6,7 +6,9 @@ import com.toy.search._enum.ToySortType;
 import com.toy.search.constant.Constants;
 import com.toy.search.dao.BabyMapper;
 import com.toy.search.dao.CityMapper;
+import com.toy.search.dao.DepotMapper;
 import com.toy.search.dao.ToyMapper;
+import com.toy.search.domain.Depot;
 import com.toy.search.domain.Keywords;
 import com.toy.search.domain.SpecialToy;
 import com.toy.search.domain.Toy;
@@ -56,6 +58,9 @@ public class SearchServiceImpl implements SearchService {
     @Autowired
     private BabyMapper babyMapper;
 
+    @Autowired
+    private DepotMapper depotMapper;
+
     @Override
     public ReturnJsonUtil searchWord(SearchParam param, long userId) {
         Map<String, Object> result = new HashMap<>(3);
@@ -79,11 +84,16 @@ public class SearchServiceImpl implements SearchService {
 
             // 1.优先有库存的排在前面
             queryBuilder.withSort(SortBuilders.scriptSort(new Script("doc['stockNum'].value > 0 ? 1 : 0"), ScriptSortBuilder.ScriptSortType.NUMBER).order(SortOrder.DESC));
+            // 2.不是中心仓的城市，可邮寄的排在前面
+            Depot depot = depotMapper.getDepot(param.getCityCode());
+            if (depot == null) {
+                queryBuilder.withSort(SortBuilders.scriptSort(new Script("doc['rentType'].value == 6 ? 1 : 0"), ScriptSortBuilder.ScriptSortType.NUMBER).order(SortOrder.DESC));
+            }
             if (StringUtils.isNotBlank(param.getKeyword())) {
-                // 2.关键字搜索的优先匹配度高的排在前面
+                // 3.关键字搜索的优先匹配度高的排在前面
                 queryBuilder.withSort(SortBuilders.scoreSort().order(SortOrder.DESC));
             }
-            // 3.其他排序
+            // 4.其他排序
             sortBuilderList.forEach(queryBuilder::withSort);
 
             Page<Toy> page = searchRepository.search(queryBuilder.build());
