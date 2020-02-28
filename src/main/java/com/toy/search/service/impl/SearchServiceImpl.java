@@ -65,6 +65,9 @@ public class SearchServiceImpl implements SearchService {
     public ReturnJsonUtil searchWord(SearchParam param, long userId) {
         Map<String, Object> result = new HashMap<>(3);
         try {
+            if (!"010".equals(param.getCityCode()) && !"023".equals(param.getCityCode()) && !"0530".equals(param.getCityCode()) && !"0532".equals(param.getCityCode()) && !"0536".equals(param.getCityCode())) {
+                param.setCityCode("021");
+            }
             Long depotId = cityMapper.getDepotId(param.getCityCode());
             if (depotId == null) {
                 depotId = Constants.BJ_DEPOT_ID;
