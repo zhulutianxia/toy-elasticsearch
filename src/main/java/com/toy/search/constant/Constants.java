@@ -39,6 +39,7 @@ public interface Constants {
     String RANGE_SEPARATOR = "~";
 
     long INVALID_USER_ID = -1;
+    long MIN_USER_ID = 0;
     String ENCODING = "UTF-8";
     String TOKEN = "token";
     String COOKIE_NAME = "ZL_UEC";

@@ -64,11 +64,20 @@ public class SearchServiceImpl implements SearchService {
     @Override
     public ReturnJsonUtil searchWord(SearchParam param, long userId) {
         Map<String, Object> result = new HashMap<>(3);
+        Long depotId = null;
         try {
             if (!"010".equals(param.getCityCode()) && !"023".equals(param.getCityCode()) && !"0530".equals(param.getCityCode()) && !"0532".equals(param.getCityCode()) && !"0536".equals(param.getCityCode())) {
                 param.setCityCode("021");
             }
-            Long depotId = cityMapper.getDepotId(param.getCityCode());
+
+            if (param.getScene() == Constants.NORMAL_SCENE) {
+                depotId = cityMapper.getDepotIdByNormal(param.getCityCode());
+            } else if (param.getScene() == Constants.MEMBER_SCENE) {
+                if (userId < Constants.MIN_USER_ID) {
+                    return ReturnJsonUtil.error(ResultEnum.TOKEN_ERROR);
+                }
+                depotId = cityMapper.getDepotIdByMember(userId);
+            }
             if (depotId == null) {
                 depotId = Constants.BJ_DEPOT_ID;
             }
@@ -117,7 +126,7 @@ public class SearchServiceImpl implements SearchService {
     @Override
     public ReturnJsonUtil recommendKeyword(String cityCode, String keyword) {
         try {
-            Long depotId = cityMapper.getDepotId(cityCode);
+            Long depotId = cityMapper.getDepotIdByNormal(cityCode);
             if (depotId == null) {
                 depotId = Constants.BJ_DEPOT_ID;
             }
