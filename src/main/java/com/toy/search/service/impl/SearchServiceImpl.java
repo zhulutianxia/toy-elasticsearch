@@ -64,20 +64,20 @@ public class SearchServiceImpl implements SearchService {
     @Override
     public ReturnJsonUtil searchWord(SearchParam param, long userId) {
         Map<String, Object> result = new HashMap<>(3);
-        Long depotId = null;
         try {
+            Depot depot = depotMapper.getDepot(param.getCityCode());
+
+            // 会员取会员开通城市
+            if (param.getScene() == Constants.MEMBER_SCENE) {
+                param.setCityCode(cityMapper.getMemberCityCode(userId));
+            }
+
+
             if (!"010".equals(param.getCityCode()) && !"023".equals(param.getCityCode()) && !"0530".equals(param.getCityCode()) && !"0532".equals(param.getCityCode()) && !"0536".equals(param.getCityCode())) {
                 param.setCityCode("021");
             }
 
-            if (param.getScene() == Constants.NORMAL_SCENE) {
-                depotId = cityMapper.getDepotIdByNormal(param.getCityCode());
-            } else if (param.getScene() == Constants.MEMBER_SCENE) {
-                if (userId < Constants.MIN_USER_ID) {
-                    return ReturnJsonUtil.error(ResultEnum.TOKEN_ERROR);
-                }
-                depotId = cityMapper.getDepotIdByMember(userId);
-            }
+            Long depotId = cityMapper.getDepotId(param.getCityCode());
             if (depotId == null) {
                 depotId = Constants.BJ_DEPOT_ID;
             }
@@ -97,7 +97,6 @@ public class SearchServiceImpl implements SearchService {
             // 1.优先有库存的排在前面
             queryBuilder.withSort(SortBuilders.scriptSort(new Script("doc['stockNum'].value > 0 ? 1 : 0"), ScriptSortBuilder.ScriptSortType.NUMBER).order(SortOrder.DESC));
             // 2.不是中心仓的城市，可邮寄的排在前面
-            Depot depot = depotMapper.getDepot(param.getCityCode());
             if (depot == null) {
                 queryBuilder.withSort(SortBuilders.scriptSort(new Script("doc['rentType'].value == 6 ? 1 : 0"), ScriptSortBuilder.ScriptSortType.NUMBER).order(SortOrder.DESC));
             }
@@ -126,7 +125,7 @@ public class SearchServiceImpl implements SearchService {
     @Override
     public ReturnJsonUtil recommendKeyword(String cityCode, String keyword) {
         try {
-            Long depotId = cityMapper.getDepotIdByNormal(cityCode);
+            Long depotId = cityMapper.getDepotId(cityCode);
             if (depotId == null) {
                 depotId = Constants.BJ_DEPOT_ID;
             }

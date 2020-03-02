@@ -10,7 +10,7 @@ import org.apache.ibatis.annotations.Select;
  */
 public interface DepotMapper {
 
-    @Select("select depot_id depotId, name, address_city_id addressCityId, address_city_code addressCityCode " +
+    @Select("select depot_id depotId, name, address_city_id addressCityId, address_city_code addressCityCode, can_onsite canOnsite " +
             "from td_depot where address_city_code = #{cityCode}")
     Depot getDepot(String cityCode);
 }

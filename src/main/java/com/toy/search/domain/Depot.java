@@ -16,4 +16,5 @@ public class Depot {
     private String name;
     private Integer addressCityId;
     private String addressCityCode;
+    private Integer canOnsite;
 }

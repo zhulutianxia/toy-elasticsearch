@@ -10,8 +10,8 @@ import org.apache.ibatis.annotations.Select;
 public interface CityMapper {
 
     @Select("select depot_id from tz_city where city_code = #{cityCode} limit 1")
-    Long getDepotIdByNormal(String cityCode);
+    Long getDepotId(String cityCode);
 
-    @Select("select depot_id from tz_city where city_code = (SELECT mu_city_code FROM t_member_user WHERE user_id = #{userId}) limit 1")
-    Long getDepotIdByMember(long userId);
+    @Select("SELECT mu_city_code FROM t_member_user WHERE user_id = #{userId}")
+    String getMemberCityCode(long userId);
 }
