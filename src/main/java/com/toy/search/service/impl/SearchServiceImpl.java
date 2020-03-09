@@ -71,7 +71,7 @@ public class SearchServiceImpl implements SearchService {
             if (param.getScene() == Constants.MEMBER_SCENE) {
                 param.setCityCode(cityMapper.getMemberCityCode(userId));
             }
-            
+
             if (!"010".equals(param.getCityCode()) && !"023".equals(param.getCityCode()) && !"0530".equals(param.getCityCode()) && !"0532".equals(param.getCityCode()) && !"0536".equals(param.getCityCode())) {
                 param.setCityCode("021");
             }
