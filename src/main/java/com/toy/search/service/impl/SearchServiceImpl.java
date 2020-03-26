@@ -154,6 +154,15 @@ public class SearchServiceImpl implements SearchService {
         }
     }
 
+    @Override
+    public ReturnJsonUtil deleteToyDocument(Long toyId) {
+        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+        boolQueryBuilder.must(QueryBuilders.matchQuery("toyId", toyId));
+        Iterable<Toy> toys = searchRepository.search(boolQueryBuilder);
+        toys.forEach(toy -> searchRepository.deleteById(toy.getId()));
+        return ReturnJsonUtil.success();
+    }
+
     /**
      * 构建toy
      *

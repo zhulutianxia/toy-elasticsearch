@@ -13,4 +13,6 @@ public interface SearchService {
     ReturnJsonUtil searchWord(SearchParam param, long userId);
 
     ReturnJsonUtil recommendKeyword(String cityCode, String keyword);
+
+    ReturnJsonUtil deleteToyDocument(Long toyId);
 }

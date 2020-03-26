@@ -48,4 +48,15 @@ public class SearchController {
     public ReturnJsonUtil recommendKeyword(@RequestParam(defaultValue = "010") String cityCode, String keyword) {
         return searchService.recommendKeyword(cityCode, keyword);
     }
+
+    /**
+     * 删除toy下数据
+     *
+     * @param toyId
+     * @return
+     */
+    @PostMapping("deleteToyDocument")
+    public ReturnJsonUtil deleteToyDocument(Long toyId) {
+        return searchService.deleteToyDocument(toyId);
+    }
 }
