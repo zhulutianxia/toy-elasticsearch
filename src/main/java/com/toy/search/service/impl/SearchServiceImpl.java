@@ -8,10 +8,7 @@ import com.toy.search.dao.BabyMapper;
 import com.toy.search.dao.CityMapper;
 import com.toy.search.dao.DepotMapper;
 import com.toy.search.dao.ToyMapper;
-import com.toy.search.domain.Depot;
-import com.toy.search.domain.Keywords;
-import com.toy.search.domain.SpecialToy;
-import com.toy.search.domain.Toy;
+import com.toy.search.domain.*;
 import com.toy.search.param.SearchParam;
 import com.toy.search.repository.KeywordsRepository;
 import com.toy.search.repository.SearchRepository;
@@ -331,11 +328,13 @@ public class SearchServiceImpl implements SearchService {
         // 尺寸筛选
         int scene = param.getScene();
         String toySize = param.getToySize();
-        if (scene == Constants.MEMBER_SCENE) {
-            if (StringUtils.isBlank(toySize)) {
-                toySize = "0,1,2";
-            } else if (StringUtils.isNotBlank(toySize) && toySize.contains("3")) {
-                toySize = StringUtil.removeString(toySize, "3", ",");
+        if (ProductVersion.parseProductVersion(param.getCv()).lessThan(ProductVersion.VERSION_5_3_0)) {
+            if (scene == Constants.MEMBER_SCENE) {
+                if (StringUtils.isBlank(toySize)) {
+                    toySize = "0,1,2";
+                } else if (StringUtils.isNotBlank(toySize) && toySize.contains("3")) {
+                    toySize = StringUtil.removeString(toySize, "3", ",");
+                }
             }
         }
         if (StringUtils.isNotBlank(toySize)) {
