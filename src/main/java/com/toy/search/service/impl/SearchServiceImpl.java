@@ -4,10 +4,7 @@ import com.toy.search._enum.ResultEnum;
 import com.toy.search._enum.ToySizeType;
 import com.toy.search._enum.ToySortType;
 import com.toy.search.constant.Constants;
-import com.toy.search.dao.BabyMapper;
-import com.toy.search.dao.CityMapper;
-import com.toy.search.dao.DepotMapper;
-import com.toy.search.dao.ToyMapper;
+import com.toy.search.dao.*;
 import com.toy.search.domain.*;
 import com.toy.search.param.SearchParam;
 import com.toy.search.repository.KeywordsRepository;
@@ -58,6 +55,9 @@ public class SearchServiceImpl implements SearchService {
     @Autowired
     private DepotMapper depotMapper;
 
+    @Autowired
+    private TimesCardMapper timesCardMapper;
+
     @Override
     public ReturnJsonUtil searchWord(SearchParam param, long userId) {
         Map<String, Object> result = new HashMap<>(3);
@@ -79,7 +79,7 @@ public class SearchServiceImpl implements SearchService {
             }
 
             // 构建查询条件
-            BoolQueryBuilder boolQueryBuilder = buildQuery(param, depotId);
+            BoolQueryBuilder boolQueryBuilder = buildQuery(param, depotId, userId);
 
             // 构建排序
             List<ScriptSortBuilder> sortBuilderList = buildQuerySort(param.getToySort(), userId);
@@ -252,7 +252,26 @@ public class SearchServiceImpl implements SearchService {
      * @param depotId
      * @return
      */
-    private BoolQueryBuilder buildQuery(SearchParam param, Long depotId) {
+    private BoolQueryBuilder buildQuery(SearchParam param, Long depotId, long userId) {
+        int scene = param.getScene();
+        String toySize = param.getToySize();
+        if (scene == Constants.MEMBER_SCENE) {
+            // 5.3.0之前去掉豪华玩具
+            if (ProductVersion.parseProductVersion(param.getCv()).lessThan(ProductVersion.VERSION_5_3_0)) {
+                if (StringUtils.isBlank(toySize)) {
+                    toySize = "0,1,2";
+                } else if (StringUtils.isNotBlank(toySize) && toySize.contains("3")) {
+                    toySize = StringUtil.removeString(toySize, "3", ",");
+                }
+            } else {
+                TimesCardValueType card = timesCardMapper.getTimesCardValueType(userId, depotId);
+                param.setBrand(card.getBrandIds());
+                param.setToyType(card.getTypeIds());
+                param.setRentType(card.getRentType());
+            }
+        }
+
+
         BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
         boolQueryBuilder.must(QueryBuilders.matchQuery("depotId", depotId));
 
@@ -326,17 +345,6 @@ public class SearchServiceImpl implements SearchService {
         }
 
         // 尺寸筛选
-        int scene = param.getScene();
-        String toySize = param.getToySize();
-        if (ProductVersion.parseProductVersion(param.getCv()).lessThan(ProductVersion.VERSION_5_3_0)) {
-            if (scene == Constants.MEMBER_SCENE) {
-                if (StringUtils.isBlank(toySize)) {
-                    toySize = "0,1,2";
-                } else if (StringUtils.isNotBlank(toySize) && toySize.contains("3")) {
-                    toySize = StringUtil.removeString(toySize, "3", ",");
-                }
-            }
-        }
         if (StringUtils.isNotBlank(toySize)) {
             String[] sizes = toySize.split(",");
             BoolQueryBuilder queryBuilder6 = QueryBuilders.boolQuery();
