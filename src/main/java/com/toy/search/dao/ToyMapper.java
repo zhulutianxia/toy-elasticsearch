@@ -76,13 +76,14 @@ public interface ToyMapper {
             "WHERE t.is_publish = 1 group by d.toy_id,d.depot_id ")
     List<Keywords> getToyKeyword();
 
-    @Select("SELECT toy_id FROM t_order_toy WHERE " +
+    @Select("SELECT toy_id FROM t_order_toy WHERE retention_num &lt; toy_num and " +
             "order_id IN (SELECT order_id FROM t_order WHERE user_id = #{userId} AND status IN (2,3,4,5,6) AND is_delete = 0 ORDER BY create_time) " +
             "UNION " +
-            "SELECT toy_id FROM t_suite_toy_relation WHERE " +
-            "suite_id IN (SELECT suite_id FROM t_order WHERE user_id = #{userId} AND status IN (2,3,4,5,6) AND is_delete = 0 ORDER BY create_time) " +
+            "SELECT toy_id FROM t_suite_toy_relation r " +
+            "left join t_order o on r.suite_id = o.suite_id " +
+            "WHERE o.user_id = #{userId} AND o.status IN (2,3,4,5,6) AND o.is_delete = 0 and o.suite_id > 0 " +
             "UNION " +
-            "SELECT toy_id FROM t_order_toy WHERE " +
+            "SELECT toy_id FROM t_order_toy WHERE retention_num &lt; toy_num and " +
             "order_id = (SELECT order_id FROM t_times_card_toy_order WHERE user_id = #{userId} AND status IN (2,3,4) ORDER BY create_time DESC LIMIT 1) ")
     List<Long> getUserInRentToyIds(long userId);
 }
