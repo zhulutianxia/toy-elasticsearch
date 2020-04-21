@@ -356,7 +356,7 @@ public class SearchServiceImpl implements SearchService {
         }
 
         // 配送方式筛选
-        if (param.getRentType() != null && (param.getRentType() == 4 || param.getRentType() == 6)) {
+        if (param.getRentType() != null) {
             if ("android".equals(param.getClient()) && param.getRentType() == 4) {
                 param.setRentType(6);
             }
