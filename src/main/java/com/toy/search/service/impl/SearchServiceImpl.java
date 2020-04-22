@@ -64,13 +64,13 @@ public class SearchServiceImpl implements SearchService {
         try {
             Depot depot = depotMapper.getDepot(param.getCityCode());
 
+            if (!"010".equals(param.getCityCode()) && !"023".equals(param.getCityCode()) && !"0530".equals(param.getCityCode()) && !"0532".equals(param.getCityCode()) && !"0536".equals(param.getCityCode())) {
+                param.setCityCode("021");
+            }
+
             // 会员取会员开通城市
             if (param.getScene() == Constants.MEMBER_SCENE) {
                 param.setCityCode(cityMapper.getMemberCityCode(userId));
-            }
-
-            if (!"010".equals(param.getCityCode()) && !"023".equals(param.getCityCode()) && !"0530".equals(param.getCityCode()) && !"0532".equals(param.getCityCode()) && !"0536".equals(param.getCityCode())) {
-                param.setCityCode("021");
             }
 
             Long depotId = cityMapper.getDepotId(param.getCityCode());
