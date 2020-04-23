@@ -60,7 +60,7 @@ public class SearchServiceImpl implements SearchService {
 
     @Override
     public ReturnJsonUtil searchWord(SearchParam param, long userId) {
-        Map<String, Object> result = new HashMap<>(3);
+        Map<String, Object> result = new HashMap<>(5);
         try {
             Depot depot = depotMapper.getDepot(param.getCityCode());
 
@@ -176,7 +176,7 @@ public class SearchServiceImpl implements SearchService {
             List<SpecialToy> specialToyIds = toyMapper.getSpecialToyIds(depotId);
             List<Long> isInRentToyIds = toyMapper.getUserInRentToyIds(userId);
             toyList.forEach(toy -> {
-                Map<String, Object> map = new HashMap<>(16);
+                Map<String, Object> map = new HashMap<>(22);
                 map.put("toyId", toy.getToyId());
                 map.put("toyName", toy.getToyName());
                 map.put("image", Constants.CDN_IMG_URL_ONLINE + toy.getImage());
