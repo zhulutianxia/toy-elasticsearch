@@ -361,7 +361,7 @@ public class SearchServiceImpl implements SearchService {
             if ("android".equals(param.getClient()) && param.getRentType() == 4) {
                 param.setRentType(6);
             }
-            if (param.getScene() == Constants.MEMBER_SCENE || (param.getScene() == Constants.NORMAL_SCENE && param.getRentType() != 2)) {
+            if (param.getRentType() == 6) {
                 BoolQueryBuilder queryBuilder7 = QueryBuilders.boolQuery();
                 queryBuilder7.should(QueryBuilders.boolQuery().filter(QueryBuilders.matchQuery("rentType", param.getRentType())));
                 boolQueryBuilder.must(queryBuilder7);
