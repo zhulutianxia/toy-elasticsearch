@@ -265,11 +265,6 @@ public class SearchServiceImpl implements SearchService {
                 } else if (StringUtils.isNotBlank(toySize) && toySize.contains("3")) {
                     toySize = StringUtil.removeString(toySize, "3", ",");
                 }
-            } else {
-                TimesCardValueType card = timesCardMapper.getTimesCardValueType(userId, depotId);
-                param.setBrand(card.getBrandIds());
-                param.setToyType(card.getTypeIds());
-                param.setRentType(card.getRentType());
             }
         }
 
