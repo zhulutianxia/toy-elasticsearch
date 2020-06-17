@@ -14,4 +14,7 @@ public interface CityMapper {
 
     @Select("SELECT mu_city_code FROM t_member_user WHERE user_id = #{userId}")
     String getMemberCityCode(long userId);
+
+    @Select("select city_code from tz_city where city_id = #{cityId} limit 1")
+    String getCityCodeByCityId(Long cityId);
 }

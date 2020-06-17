@@ -64,6 +64,10 @@ public class SearchServiceImpl implements SearchService {
         try {
             Depot depot = depotMapper.getDepot(param.getCityCode());
 
+            if (param.getCityId() != null) {
+                param.setCityCode(cityMapper.getCityCodeByCityId(param.getCityId()));
+            }
+
             // 不是中心仓的城市展示上海的玩具
             List<String> depotCityCodes = depotMapper.getDepotCityCodeList();
             if (!depotCityCodes.contains(param.getCityCode())) {
