@@ -85,7 +85,7 @@ public class SearchServiceImpl implements SearchService {
             }
 
             // 构建查询条件
-            BoolQueryBuilder boolQueryBuilder = buildQuery(param, depotId, userId);
+            BoolQueryBuilder boolQueryBuilder = buildQuery(param, depotId);
 
             // 构建排序
             List<ScriptSortBuilder> sortBuilderList = buildQuerySort(param.getToySort(), userId);
@@ -258,7 +258,7 @@ public class SearchServiceImpl implements SearchService {
      * @param depotId
      * @return
      */
-    private BoolQueryBuilder buildQuery(SearchParam param, Long depotId, long userId) {
+    private BoolQueryBuilder buildQuery(SearchParam param, Long depotId) {
         int scene = param.getScene();
         String toySize = param.getToySize();
         if (scene == Constants.MEMBER_SCENE) {
@@ -365,6 +365,13 @@ public class SearchServiceImpl implements SearchService {
                 queryBuilder7.should(QueryBuilders.boolQuery().filter(QueryBuilders.matchQuery("rentType", param.getRentType())));
                 boolQueryBuilder.must(queryBuilder7);
             }
+        }
+
+        if (param.getStockNum() != null && param.getStockNum() == 1) {
+            BoolQueryBuilder queryBuilder8 = QueryBuilders.boolQuery();
+            queryBuilder8.should(QueryBuilders.boolQuery()
+                    .filter(QueryBuilders.rangeQuery("stockNum").gte(0)));
+            boolQueryBuilder.must(queryBuilder8);
         }
 
         return boolQueryBuilder;
