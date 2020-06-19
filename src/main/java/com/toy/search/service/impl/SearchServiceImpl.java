@@ -367,10 +367,11 @@ public class SearchServiceImpl implements SearchService {
             }
         }
 
+        // 有库存的
         if (param.getStockNum() != null && param.getStockNum() == 1) {
             BoolQueryBuilder queryBuilder8 = QueryBuilders.boolQuery();
             queryBuilder8.should(QueryBuilders.boolQuery()
-                    .filter(QueryBuilders.rangeQuery("stockNum").gte(0)));
+                    .filter(QueryBuilders.rangeQuery("stockNum").gte(1)));
             boolQueryBuilder.must(queryBuilder8);
         }
 
