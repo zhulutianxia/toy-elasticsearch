@@ -25,7 +25,7 @@ spring:
   data:
     elasticsearch:
       cluster-name: es-msz
-      cluster-nodes: 106.75.72.149:9300
+      cluster-nodes: 120.53.226.19:9300
       ##开启 Elasticsearch 仓库
       repositories:
         enabled: true
