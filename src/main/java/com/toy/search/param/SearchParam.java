@@ -36,4 +36,13 @@ public class SearchParam {
      * 场景
      */
     private int scene = Constants.NORMAL_SCENE;
+
+    /**
+     * 支付宝小程序传cityId后端获取cityCode，其他传cityCode
+     */
+    private Long cityId;
+    /**
+     * 支付宝小程序赛选，仅看有货
+     */
+    private Integer stockNum;
 }
