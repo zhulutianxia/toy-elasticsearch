@@ -4,9 +4,9 @@ server:
 spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://106.75.4.96:6033/toy?useUnicode=true&character_set_client=utf8mb4
-    username: xieyabo
-    password: bj173
+    url: jdbc:mysql://10.0.4.16:3306/toy?useUnicode=true&character_set_client=utf8mb4
+    username: root
+    password: msz@2020
 
     druid:
       initial-size: 5
