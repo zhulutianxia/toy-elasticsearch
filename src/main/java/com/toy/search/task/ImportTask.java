@@ -32,11 +32,12 @@ public class ImportTask {
     private KeywordsRepository keywordsRepository;
 
     @Async
-//    @Scheduled(cron = "0 7 0/1 * * ?")
+    @Scheduled(cron = "0 7 3 * * ?")
     public void importToy() {
         try {
             log.info("开始导入玩具数据...");
             long startTime = System.currentTimeMillis();
+            searchRepository.deleteAll();
             Iterable<Toy> data = searchRepository.saveAll(toyMapper.getToyList());
             if (data != null) {
                 long endTime = System.currentTimeMillis() - startTime;
@@ -44,7 +45,6 @@ public class ImportTask {
             }
         } catch (Exception e) {
             log.error("【error】玩具数据导入失败！", e);
-            e.printStackTrace();
         }
     }
 
@@ -62,7 +62,6 @@ public class ImportTask {
             }
         } catch (Exception e) {
             log.error("【error】玩具搜索关键词数据导入失败！", e);
-            e.printStackTrace();
         }
     }
 }
