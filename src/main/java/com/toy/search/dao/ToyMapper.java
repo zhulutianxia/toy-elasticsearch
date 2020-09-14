@@ -76,8 +76,9 @@ public interface ToyMapper {
             "WHERE t.is_publish = 1 group by d.toy_id,d.depot_id ")
     List<Keywords> getToyKeyword();
 
-    @Select("SELECT toy_id FROM t_order_toy WHERE retention_num < toy_num and " +
-            "order_id IN (SELECT order_id FROM t_order WHERE user_id = #{userId} AND status IN (2,3,4,5,6) AND is_delete = 0 ORDER BY create_time) " +
+    @Select("SELECT t.toy_id FROM t_order_toy t  " +
+            "left join t_order o on t.order_id = o.order_id " +
+            "WHERE t.retention_num < t.toy_num and o.user_id = #{userId} AND o.status IN (2,3,4,5,6) AND o.is_delete = 0 " +
             "UNION " +
             "SELECT toy_id FROM t_suite_toy_relation r " +
             "left join t_order o on r.suite_id = o.suite_id " +
