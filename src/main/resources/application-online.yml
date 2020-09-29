@@ -4,9 +4,9 @@ server:
 spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://10.0.0.14:3306/toy?useUnicode=true&character_set_client=utf8mb4
-    username: root
-    password: msz@2020
+    url: jdbc:mysql://10.10.71.156:3306/toy?useUnicode=true&character_set_client=utf8mb4
+    username: toy-rw
+    password: toyD901online
 
     druid:
       initial-size: 5
@@ -25,7 +25,7 @@ spring:
   data:
     elasticsearch:
       cluster-name: es-msz
-      cluster-nodes: 120.53.226.19:9300
+      cluster-nodes: 106.75.72.149:9300
       ##开启 Elasticsearch 仓库
       repositories:
         enabled: true
