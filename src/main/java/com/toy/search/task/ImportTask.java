@@ -38,11 +38,9 @@ public class ImportTask {
             log.info("开始导入玩具数据...");
             long startTime = System.currentTimeMillis();
             searchRepository.deleteAll();
-            Iterable<Toy> data = searchRepository.saveAll(toyMapper.getToyList());
-            if (data != null) {
-                long endTime = System.currentTimeMillis() - startTime;
-                log.info("【success】玩具数据导入完毕！耗时={}ms", endTime);
-            }
+            searchRepository.saveAll(toyMapper.getToyList());
+            long endTime = System.currentTimeMillis() - startTime;
+            log.info("【success】玩具数据导入完毕！耗时={}ms", endTime);
         } catch (Exception e) {
             log.error("【error】玩具数据导入失败！", e);
         }
@@ -55,11 +53,9 @@ public class ImportTask {
             log.info("开始导入玩具搜索关键词...");
             long startTime = System.currentTimeMillis();
             keywordsRepository.deleteAll();
-            Iterable<Keywords> data = keywordsRepository.saveAll(toyMapper.getToyKeyword());
-            if (data != null) {
-                long endTime = System.currentTimeMillis() - startTime;
-                log.info("【success】玩具搜索关键词数据导入完毕！耗时={}ms", endTime);
-            }
+            keywordsRepository.saveAll(toyMapper.getToyKeyword());
+            long endTime = System.currentTimeMillis() - startTime;
+            log.info("【success】玩具搜索关键词数据导入完毕！耗时={}ms", endTime);
         } catch (Exception e) {
             log.error("【error】玩具搜索关键词数据导入失败！", e);
         }
