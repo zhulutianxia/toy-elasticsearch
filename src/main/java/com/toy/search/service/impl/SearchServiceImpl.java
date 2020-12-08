@@ -69,10 +69,10 @@ public class SearchServiceImpl implements SearchService {
             }
 
             // 不是中心仓的城市展示上海的玩具
-            List<String> depotCityCodes = depotMapper.getDepotCityCodeList();
-            if (!depotCityCodes.contains(param.getCityCode())) {
-                param.setCityCode("021");
-            }
+//            List<String> depotCityCodes = depotMapper.getDepotCityCodeList();
+//            if (!depotCityCodes.contains(param.getCityCode())) {
+//                param.setCityCode("021");
+//            }
 
             // 会员取会员开通城市
             if (param.getScene() == Constants.MEMBER_SCENE) {

@@ -17,5 +17,5 @@ public interface DepotMapper {
     Depot getDepot(String cityCode);
 
     @Select("select address_city_code from td_depot")
-    List<String> getDepotCityCodeList();
+    List<String> wgetDepotCityCodeList();
 }
